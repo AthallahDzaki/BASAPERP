@@ -394,7 +394,7 @@ export default function CustomerPage() {
                 {customers.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
-                      No customers found. Click "Add Customer" to create one.
+                      No customers found. Click &lsquo;Add Customer&lsquo; to create one.
                     </td>
                   </tr>
                 ) : (
