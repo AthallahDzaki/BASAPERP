@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import './globals.css'
-import Navbar from '@/components/Navbar'
+import ConditionalNavbar from '@/components/ConditionalNavbar'
+import MainWrapper from '@/components/MainWrapper'
 import { AuthProvider } from '@/contexts/AuthContext'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -16,12 +17,10 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <AuthProvider>
           <div className="min-h-screen bg-gradient-to-br from-slate-50 via-green-50 to-emerald-50">
-            <Navbar />
-            <main className="pt-16 px-4 pb-8">
-              <div className="max-w-7xl mx-auto">
-                {children}
-              </div>
-            </main>
+            <ConditionalNavbar />
+            <MainWrapper>
+              {children}
+            </MainWrapper>
           </div>
         </AuthProvider>
       </body>

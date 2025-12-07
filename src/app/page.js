@@ -129,6 +129,14 @@ export default function Home() {
       href: '/quotation',
       color: 'bg-amber-500',
       gradient: 'from-amber-500 to-amber-600'
+    },
+    {
+      title: 'Employees',
+      description: 'Manage employee information and records',
+      icon: Users,
+      href: '/employees',
+      color: 'bg-purple-500',
+      gradient: 'from-purple-500 to-pink-600'
     }
   ]
 

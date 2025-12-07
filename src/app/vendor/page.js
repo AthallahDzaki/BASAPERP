@@ -51,7 +51,11 @@ export default function VendorPage() {
       }
       setShowModal(false)
       resetForm()
+      console.log("Vendor Before", vendors);
       refetchVendors()
+      setTimeout(() => {
+          console.log("Vendor After", vendors);
+      }, 5000);
     } catch (error) {
       showAlert(error.message || 'Failed to save vendor', 'error')
     }
@@ -96,7 +100,7 @@ export default function VendorPage() {
     setEditingVendor(null)
   }
 
-  const filteredVendors = vendors?.vendors?.filter(vendor =>
+  const filteredVendors = vendors?.filter(vendor =>
     vendor.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     vendor.email?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || []

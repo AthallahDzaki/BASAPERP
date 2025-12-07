@@ -123,6 +123,18 @@ export const manufacturingOrdersAPI = {
   delete: (id) => apiCall(`/manufacturing-orders/${id}`, { method: 'DELETE' }),
 };
 
+// Employees API
+export const employeesAPI = {
+  getAll: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiCall(`/employees${queryString ? `?${queryString}` : ''}`);
+  },
+  getById: (id) => apiCall(`/employees/${id}`),
+  create: (data) => apiCall('/employees', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id, data) => apiCall(`/employees/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  delete: (id) => apiCall(`/employees/${id}`, { method: 'DELETE' }),
+};
+
 // Health Check
 export const healthAPI = {
   check: () => apiCall('/health'),

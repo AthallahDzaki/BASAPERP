@@ -12,16 +12,28 @@ export default function BOMPage() {
   const [editingBOM, setEditingBOM] = useState(null)
   const [alert, setAlert] = useState({ show: false, message: '', type: '' })
 
-  // Fetch data
-  const { data: boms, loading: bomsLoading, error: bomsError, refetch: refetchBOMs } = useAPI(bomAPI.getAll)
+  // Fetch data via useAPI
+  const { data: boms, loading: bomsLoading, error: bomsError } = useAPI(bomAPI.getAll)
   const { data: products, loading: productsLoading } = useAPI(productsAPI.getAll)
+
+  // Local state to drive UI so we can explicitly update it after mutations
+  const [bomsState, setBomsState] = useState([])
 
   // API calls
   const { execute: createBOM, loading: creating } = useAPICall(bomAPI.create)
   const { execute: updateBOM, loading: updating } = useAPICall(bomAPI.update)
   const { execute: deleteBOM, loading: deleting } = useAPICall(bomAPI.delete)
+  // use this execute to fetch all BOMs on demand and update bomsState
+  const { execute: fetchAllBOMs } = useAPICall(bomAPI.getAll)
 
-  // Form state
+  // Sync initial data loaded by useAPI into local state
+  useEffect(() => {
+    if (boms) {
+      setBomsState(boms)
+    }
+  }, [boms])
+
+  // Form state - gunakan "product" untuk id dalam UI; kita akan transform ke "component" saat submit
   const [formData, setFormData] = useState({
     product: '',
     quantity: 1,
@@ -34,21 +46,31 @@ export default function BOMPage() {
   }
 
   const handleAddComponent = () => {
-    setFormData({
-      ...formData,
-      components: [...formData.components, { product: '', quantity: 1, unitOfMeasure: 'pcs' }]
-    })
+    setFormData((prev) => ({
+      ...prev,
+      components: [...prev.components, { product: '', quantity: 1, unitOfMeasure: 'pcs' }]
+    }))
   }
 
   const handleRemoveComponent = (index) => {
-    const newComponents = formData.components.filter((_, i) => i !== index)
-    setFormData({ ...formData, components: newComponents })
+    setFormData((prev) => {
+      const newComponents = prev.components.filter((_, i) => i !== index)
+      return { ...prev, components: newComponents }
+    })
   }
 
   const handleComponentChange = (index, field, value) => {
-    const newComponents = [...formData.components]
-    newComponents[index][field] = value
-    setFormData({ ...formData, components: newComponents })
+    setFormData((prev) => {
+      const newComponents = prev.components.map((c, i) => {
+        if (i !== index) return c
+        if (field === 'quantity') {
+          const num = parseFloat(value)
+          return { ...c, quantity: isNaN(num) ? 0 : num }
+        }
+        return { ...c, [field]: value }
+      })
+      return { ...prev, components: newComponents }
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -60,35 +82,57 @@ export default function BOMPage() {
     }
 
     if (formData.components.some(c => !c.product || c.quantity <= 0)) {
-      showAlert('Please fill all component details', 'error')
+      showAlert('Please fill all component details and ensure quantities > 0', 'error')
       return
+    }
+
+    // Transform payload: UI uses components[].product, API expects components[].component
+    const payload = {
+      product: formData.product,
+      quantity: formData.quantity,
+      components: formData.components.map(c => ({
+        component: c.product, // server expects `component`
+        quantity: c.quantity,
+        unitOfMeasure: c.unitOfMeasure
+      }))
     }
 
     try {
       if (editingBOM) {
-        await updateBOM(editingBOM._id, formData)
+        await updateBOM(editingBOM._id, payload)
         showAlert('BOM updated successfully!')
       } else {
-        await createBOM(formData)
+        await createBOM(payload)
         showAlert('BOM created successfully!')
       }
+
+      // Fetch latest list and update local state so UI reflects new data
+      try {
+        const res = await fetchAllBOMs()
+        // fetchAllBOMs may return response shaped as { data: [...] } or directly [...]
+        const latest = res?.data ?? res
+        if (latest) setBomsState(latest)
+      } catch (err) {
+        console.warn('Failed to re-fetch BOMs after save:', err)
+      }
+
       setShowModal(false)
       resetForm()
-      refetchBOMs()
     } catch (error) {
-      showAlert(error.message || 'Failed to save BOM', 'error')
+      showAlert(error?.message || 'Failed to save BOM', 'error')
+      console.error(error)
     }
   }
 
   const handleEdit = (bom) => {
     setEditingBOM(bom)
     setFormData({
-      product: bom.product._id,
-      quantity: bom.quantity,
-      components: bom.components.map(c => ({
-        product: c.product._id,
-        quantity: c.quantity,
-        unitOfMeasure: c.unitOfMeasure
+      product: bom.product?._id || '',
+      quantity: bom.quantity || 1,
+      components: (bom.components || []).map(c => ({
+        product: c.component?._id || c.product?._id || '',
+        quantity: c.quantity || 1,
+        unitOfMeasure: c.unitOfMeasure || 'pcs'
       }))
     })
     setShowModal(true)
@@ -100,9 +144,17 @@ export default function BOMPage() {
     try {
       await deleteBOM(id)
       showAlert('BOM deleted successfully!')
-      refetchBOMs()
+
+      // re-fetch and update local state
+      try {
+        const res = await fetchAllBOMs()
+        const latest = res?.data ?? res
+        if (latest) setBomsState(latest)
+      } catch (err) {
+        console.warn('Failed to re-fetch BOMs after delete:', err)
+      }
     } catch (error) {
-      showAlert(error.message || 'Failed to delete BOM', 'error')
+      showAlert(error?.message || 'Failed to delete BOM', 'error')
     }
   }
 
@@ -115,7 +167,7 @@ export default function BOMPage() {
     setEditingBOM(null)
   }
 
-  const filteredBOMs = boms?.filter(bom =>
+  const filteredBOMs = (bomsState || []).filter(bom =>
     bom.product?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     bom.bomNumber?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || []
@@ -194,7 +246,7 @@ export default function BOMPage() {
               <tbody className="divide-y divide-gray-200">
                 {filteredBOMs.map((bom) => (
                   <tr key={bom._id} className="hover:bg-purple-50 transition-colors">
-                    <td className="px-6 py-4 font-medium text-gray-900">{bom.bomNumber}</td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{bom._id}</td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-gray-900">{bom.product?.name}</div>
                       <div className="text-sm text-gray-500">{bom.product?.sku}</div>
@@ -264,7 +316,7 @@ export default function BOMPage() {
                     required
                   >
                     <option value="">Select Product</option>
-                    {products?.products?.map((product) => (
+                    {products?.map((product) => (
                       <option key={product._id} value={product._id}>
                         {product.name} ({product.sku})
                       </option>
@@ -280,7 +332,10 @@ export default function BOMPage() {
                     type="number"
                     min="1"
                     value={formData.quantity}
-                    onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
+                    onChange={(e) => {
+                      const n = parseInt(e.target.value, 10)
+                      setFormData({ ...formData, quantity: isNaN(n) ? 1 : n })
+                    }}
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
                     required
                   />
@@ -313,7 +368,7 @@ export default function BOMPage() {
                         required
                       >
                         <option value="">Select Component</option>
-                        {products?.products?.map((product) => (
+                        {products?.map((product) => (
                           <option key={product._id} value={product._id}>
                             {product.name}
                           </option>
@@ -325,7 +380,7 @@ export default function BOMPage() {
                         min="0.01"
                         step="0.01"
                         value={component.quantity}
-                        onChange={(e) => handleComponentChange(index, 'quantity', parseFloat(e.target.value))}
+                        onChange={(e) => handleComponentChange(index, 'quantity', e.target.value)}
                         className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-purple-500"
                         placeholder="Qty"
                         required

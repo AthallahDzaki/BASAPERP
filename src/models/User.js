@@ -46,10 +46,6 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Index for faster queries
-userSchema.index({ email: 1 });
-userSchema.index({ role: 1 });
-
 // Don't return password in JSON
 userSchema.methods.toJSON = function() {
   const user = this.toObject();

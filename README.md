@@ -35,6 +35,7 @@ Modern ERP Dashboard dengan **Next.js 15**, **MongoDB**, dan **Tailwind CSS**. F
 - **Customers** - Customer database
 - **Quotations** - Customer quotations
 - **Manufacturing Orders** - Production management
+- **Employees** - Employee management with HR features ⭐ NEW!
 
 ## � Quick Start
 

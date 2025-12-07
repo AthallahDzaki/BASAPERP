@@ -1,7 +1,5 @@
 import mongoose from 'mongoose';
 
-let counter = 1000;
-
 const RFQSchema = new mongoose.Schema({
   rfqNumber: {
     type: String,
@@ -42,11 +40,17 @@ const RFQSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-RFQSchema.pre('save', async function(next) {
-  if (!this.rfqNumber) {
-    this.rfqNumber = `RFQ${String(counter++).padStart(5, '0')}`;
+RFQSchema.pre('save', async function() {
+  if (this.isNew && !this.rfqNumber) {
+    const ret = await Counter.findOneAndUpdate(
+      { _id: 'rfq' },
+      { $inc: { seq: 1 } },
+      { new: true, upsert: true }
+    ).exec()
+
+    const seq = ret.seq
+    this.rfqNumber = `RFQ${String(seq).padStart(5, '0')}`
   }
-  next();
-});
+})
 
 export default mongoose.models.RFQ || mongoose.model('RFQ', RFQSchema);

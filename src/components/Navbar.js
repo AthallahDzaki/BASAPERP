@@ -60,6 +60,14 @@ export default function Navbar() {
         { href: '/customer', label: 'Customers', icon: Users },
       ]
     },
+    {
+      id: 'hr',
+      label: 'HR',
+      icon: User,
+      items: [
+        { href: '/employees', label: 'Employees', icon: Users },
+      ]
+    },
   ]
 
   const isActive = (href) => {

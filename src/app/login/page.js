@@ -111,7 +111,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Demo Credentials */}
+        {/* Demo Credentials 
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500 text-center mb-2">Demo Credentials:</p>
           <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-1">
@@ -120,6 +120,7 @@ export default function LoginPage() {
             <p><strong>User:</strong> user@erp.com / user123</p>
           </div>
         </div>
+        */}
       </div>
     </div>
   );

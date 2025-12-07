@@ -23,7 +23,7 @@ export default function RFQPage() {
   const [formData, setFormData] = useState({
     vendor: '',
     requestDate: new Date().toISOString().split('T')[0],
-    requiredByDate: '',
+    requiredBy: '',
     status: 'draft',
     items: [{ product: '', quantity: 1, estimatedPrice: 0 }]
   })
@@ -85,7 +85,7 @@ export default function RFQPage() {
     setFormData({
       vendor: rfq.vendor._id,
       requestDate: rfq.requestDate?.split('T')[0] || '',
-      requiredByDate: rfq.requiredByDate?.split('T')[0] || '',
+      requiredBy: rfq.requiredBy?.split('T')[0] || '',
       status: rfq.status,
       items: rfq.items.map(item => ({
         product: item.product._id,
@@ -112,7 +112,7 @@ export default function RFQPage() {
     setFormData({
       vendor: '',
       requestDate: new Date().toISOString().split('T')[0],
-      requiredByDate: '',
+      requiredBy: '',
       status: 'draft',
       items: [{ product: '', quantity: 1, estimatedPrice: 0 }]
     })
@@ -212,7 +212,7 @@ export default function RFQPage() {
                       {new Date(rfq.requestDate).toLocaleDateString()}
                     </td>
                     <td className="px-6 py-4 text-gray-700">
-                      {rfq.requiredByDate ? new Date(rfq.requiredByDate).toLocaleDateString() : '-'}
+                      {rfq.requiredBy ? new Date(rfq.requiredBy).toLocaleDateString() : '-'}
                     </td>
                     <td className="px-6 py-4">
                       <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
@@ -281,7 +281,7 @@ export default function RFQPage() {
                     required
                   >
                     <option value="">Select Vendor</option>
-                    {vendors?.vendors?.map((vendor) => (
+                    {vendors?.map((vendor) => (
                       <option key={vendor._id} value={vendor._id}>
                         {vendor.name}
                       </option>
@@ -325,8 +325,8 @@ export default function RFQPage() {
                   </label>
                   <input
                     type="date"
-                    value={formData.requiredByDate}
-                    onChange={(e) => setFormData({ ...formData, requiredByDate: e.target.value })}
+                    value={formData.requiredBy}
+                    onChange={(e) => setFormData({ ...formData, requiredBy: e.target.value })}
                     className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
                   />
                 </div>
@@ -357,7 +357,7 @@ export default function RFQPage() {
                         required
                       >
                         <option value="">Select Product</option>
-                        {products?.products?.map((product) => (
+                        {products?.map((product) => (
                           <option key={product._id} value={product._id}>
                             {product.name}
                           </option>
