@@ -226,7 +226,7 @@ export default function QuotationsPage() {
             placeholder="Search Quotations..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 transition-all text-gray-900"
           />
         </div>
       </div>
@@ -322,7 +322,7 @@ export default function QuotationsPage() {
                   <select
                     value={formData.customer}
                     onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                     required
                   >
                     <option value="">Select Customer</option>
@@ -338,7 +338,7 @@ export default function QuotationsPage() {
                     type="date"
                     value={formData.quotationDate}
                     onChange={(e) => setFormData({ ...formData, quotationDate: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                     required
                   />
                 </div>
@@ -349,7 +349,7 @@ export default function QuotationsPage() {
                     type="date"
                     value={formData.expiryDate}
                     onChange={(e) => setFormData({ ...formData, expiryDate: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                   />
                 </div>
 
@@ -358,7 +358,7 @@ export default function QuotationsPage() {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                     required
                   >
                     <option value="draft">Draft</option>
@@ -378,7 +378,7 @@ export default function QuotationsPage() {
                     step="0.01"
                     value={formData.taxRate}
                     onChange={(e) => setFormData({ ...formData, taxRate: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -402,7 +402,7 @@ export default function QuotationsPage() {
                       <select
                         value={item.product}
                         onChange={(e) => handleItemChange(index, 'product', e.target.value)}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                         required
                       >
                         <option value="">Select Product</option>
@@ -418,7 +418,7 @@ export default function QuotationsPage() {
                         min="1"
                         value={item.quantity}
                         onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
-                        className="w-24 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                        className="w-24 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                         placeholder="Qty"
                         required
                       />
@@ -429,7 +429,7 @@ export default function QuotationsPage() {
                         step="0.01"
                         value={item.unitPrice}
                         onChange={(e) => handleItemChange(index, 'unitPrice', parseFloat(e.target.value))}
-                        className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                        className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                         placeholder="Price"
                         required
                       />
@@ -441,7 +441,7 @@ export default function QuotationsPage() {
                         step="0.01"
                         value={item.discount}
                         onChange={(e) => handleItemChange(index, 'discount', parseFloat(e.target.value) || 0)}
-                        className="w-24 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                        className="w-24 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                         placeholder="Disc %"
                       />
 
@@ -469,7 +469,7 @@ export default function QuotationsPage() {
                   value={formData.terms}
                   onChange={(e) => setFormData({ ...formData, terms: e.target.value })}
                   rows="3"
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 text-gray-900"
                   placeholder="Enter payment terms, delivery terms, etc."
                 />
               </div>

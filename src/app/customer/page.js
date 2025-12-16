@@ -178,7 +178,7 @@ export default function CustomerPage() {
               placeholder="Search customers by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
             />
           </div>
         </div>
@@ -204,7 +204,7 @@ export default function CustomerPage() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter customer name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   required
                 />
               </div>
@@ -218,7 +218,7 @@ export default function CustomerPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="customer@example.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   required
                 />
               </div>
@@ -232,7 +232,7 @@ export default function CustomerPage() {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="+62812345678"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                 />
               </div>
               <div>
@@ -245,7 +245,7 @@ export default function CustomerPage() {
                   value={formData.taxId}
                   onChange={handleChange}
                   placeholder="01.234.567.8-901.000"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                 />
               </div>
             </div>
@@ -264,7 +264,7 @@ export default function CustomerPage() {
                     value={formData.address.street}
                     onChange={handleChange}
                     placeholder="Jl. Sudirman No. 123"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   />
                 </div>
                 <div>
@@ -277,7 +277,7 @@ export default function CustomerPage() {
                     value={formData.address.city}
                     onChange={handleChange}
                     placeholder="Jakarta"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   />
                 </div>
                 <div>
@@ -290,7 +290,7 @@ export default function CustomerPage() {
                     value={formData.address.state}
                     onChange={handleChange}
                     placeholder="DKI Jakarta"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   />
                 </div>
                 <div>
@@ -303,7 +303,7 @@ export default function CustomerPage() {
                     value={formData.address.zipCode}
                     onChange={handleChange}
                     placeholder="12190"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   />
                 </div>
                 <div>
@@ -315,7 +315,7 @@ export default function CustomerPage() {
                     name="address.country"
                     value={formData.address.country}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                   />
                 </div>
               </div>
@@ -331,7 +331,7 @@ export default function CustomerPage() {
                   name="paymentTerms"
                   value={formData.paymentTerms}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent bg-white text-gray-900"
                 >
                   <option value="Net 30">Net 30</option>
                   <option value="Net 60">Net 60</option>
@@ -349,7 +349,7 @@ export default function CustomerPage() {
                   value={formData.creditLimit}
                   onChange={handleChange}
                   placeholder="0"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 focus:border-transparent text-gray-900"
                 />
               </div>
             </div>
