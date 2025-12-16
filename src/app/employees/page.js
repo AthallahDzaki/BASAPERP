@@ -254,14 +254,14 @@ export default function EmployeesPage() {
                   placeholder="Search employees..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                 />
               </div>
 
               <select
                 value={filterDepartment}
                 onChange={(e) => setFilterDepartment(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
               >
                 <option value="">All Departments</option>
                 {departments.map(dept => (
@@ -272,7 +272,7 @@ export default function EmployeesPage() {
               <select
                 value={filterActive}
                 onChange={(e) => setFilterActive(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
               >
                 <option value="">All Status</option>
                 <option value="true">Active</option>
@@ -433,7 +433,7 @@ export default function EmployeesPage() {
                           value={formData.employeeId}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                           placeholder="EMP001"
                         />
                       </div>
@@ -447,7 +447,7 @@ export default function EmployeesPage() {
                           value={formData.gender}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         >
                           {genders.map(gender => (
                             <option key={gender} value={gender}>{gender}</option>
@@ -465,7 +465,7 @@ export default function EmployeesPage() {
                           value={formData.firstName}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -479,7 +479,7 @@ export default function EmployeesPage() {
                           value={formData.lastName}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -493,7 +493,7 @@ export default function EmployeesPage() {
                           value={formData.email}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -507,7 +507,7 @@ export default function EmployeesPage() {
                           value={formData.phone}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -521,7 +521,7 @@ export default function EmployeesPage() {
                           value={formData.dateOfBirth}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
                     </div>
@@ -540,7 +540,7 @@ export default function EmployeesPage() {
                           name="address.street"
                           value={formData.address.street}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -553,7 +553,7 @@ export default function EmployeesPage() {
                           name="address.city"
                           value={formData.address.city}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -566,7 +566,7 @@ export default function EmployeesPage() {
                           name="address.state"
                           value={formData.address.state}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -579,7 +579,7 @@ export default function EmployeesPage() {
                           name="address.zipCode"
                           value={formData.address.zipCode}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -592,7 +592,7 @@ export default function EmployeesPage() {
                           name="address.country"
                           value={formData.address.country}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
                     </div>
@@ -611,7 +611,7 @@ export default function EmployeesPage() {
                           value={formData.department}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         >
                           {departments.map(dept => (
                             <option key={dept} value={dept}>{dept}</option>
@@ -629,7 +629,7 @@ export default function EmployeesPage() {
                           value={formData.position}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -642,7 +642,7 @@ export default function EmployeesPage() {
                           value={formData.employmentType}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         >
                           {employmentTypes.map(type => (
                             <option key={type} value={type}>{type}</option>
@@ -660,7 +660,7 @@ export default function EmployeesPage() {
                           value={formData.hireDate}
                           onChange={handleChange}
                           required
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -675,7 +675,7 @@ export default function EmployeesPage() {
                           onChange={handleChange}
                           required
                           min="0"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -687,7 +687,7 @@ export default function EmployeesPage() {
                           name="manager"
                           value={formData.manager}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         >
                           <option value="">No Manager</option>
                           {employees?.filter(e => e._id !== editingId && e.isActive).map(emp => (
@@ -713,7 +713,7 @@ export default function EmployeesPage() {
                           name="emergencyContact.name"
                           value={formData.emergencyContact.name}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -726,7 +726,7 @@ export default function EmployeesPage() {
                           name="emergencyContact.relationship"
                           value={formData.emergencyContact.relationship}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -739,7 +739,7 @@ export default function EmployeesPage() {
                           name="emergencyContact.phone"
                           value={formData.emergencyContact.phone}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
                     </div>
@@ -758,7 +758,7 @@ export default function EmployeesPage() {
                           name="bankAccount.bankName"
                           value={formData.bankAccount.bankName}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -771,7 +771,7 @@ export default function EmployeesPage() {
                           name="bankAccount.accountNumber"
                           value={formData.bankAccount.accountNumber}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -784,7 +784,7 @@ export default function EmployeesPage() {
                           name="bankAccount.accountHolder"
                           value={formData.bankAccount.accountHolder}
                           onChange={handleChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                         />
                       </div>
                     </div>
@@ -800,7 +800,7 @@ export default function EmployeesPage() {
                       value={formData.notes}
                       onChange={handleChange}
                       rows="3"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-gray-900"
                       placeholder="Additional notes..."
                     ></textarea>
                   </div>

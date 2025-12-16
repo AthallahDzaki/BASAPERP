@@ -219,7 +219,7 @@ export default function PurchaseOrdersPage() {
                     required
                     value={formData.vendor}
                     onChange={(e) => setFormData({ ...formData, vendor: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   >
                     <option value="">Select vendor</option>
                     {vendors?.map(vendor => (
@@ -237,7 +237,7 @@ export default function PurchaseOrdersPage() {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   >
                     <option value="draft">Draft</option>
                     <option value="confirmed">Confirmed</option>
@@ -255,7 +255,7 @@ export default function PurchaseOrdersPage() {
                     required
                     value={formData.orderDate}
                     onChange={(e) => setFormData({ ...formData, orderDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export default function PurchaseOrdersPage() {
                     type="date"
                     value={formData.expectedDelivery}
                     onChange={(e) => setFormData({ ...formData, expectedDelivery: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   />
                 </div>
               </div>
@@ -280,7 +280,7 @@ export default function PurchaseOrdersPage() {
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows="2"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                   placeholder="Additional notes..."
                 />
               </div>
@@ -310,7 +310,7 @@ export default function PurchaseOrdersPage() {
                           required
                           value={item.product}
                           onChange={(e) => updateItem(index, 'product', e.target.value)}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                         >
                           <option value="">Select product</option>
                           {products?.map(product => (
@@ -331,7 +331,7 @@ export default function PurchaseOrdersPage() {
                           min="1"
                           value={item.quantity}
                           onChange={(e) => updateItem(index, 'quantity', parseInt(e.target.value))}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 
@@ -346,7 +346,7 @@ export default function PurchaseOrdersPage() {
                           step="0.01"
                           value={item.unitPrice}
                           onChange={(e) => updateItem(index, 'unitPrice', parseFloat(e.target.value))}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
                         />
                       </div>
 

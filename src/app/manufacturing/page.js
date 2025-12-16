@@ -207,7 +207,7 @@ export default function ManufacturingOrdersPage() {
             placeholder="Search Manufacturing Orders..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all text-gray-900"
           />
         </div>
       </div>
@@ -306,7 +306,7 @@ export default function ManufacturingOrdersPage() {
                   <select
                     value={formData.product}
                     onChange={(e) => handleProductChange(e.target.value)}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     required
                   >
                     <option value="">Select Product</option>
@@ -323,7 +323,7 @@ export default function ManufacturingOrdersPage() {
                   <select
                     value={formData.bom}
                     onChange={(e) => setFormData({ ...formData, bom: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     required
                     disabled={!formData.product}
                   >
@@ -343,7 +343,7 @@ export default function ManufacturingOrdersPage() {
                     min="1"
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     required
                   />
                 </div>
@@ -354,7 +354,7 @@ export default function ManufacturingOrdersPage() {
                     type="text"
                     value={formData.workCenter}
                     onChange={(e) => setFormData({ ...formData, workCenter: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     placeholder="e.g., Assembly Line 1"
                   />
                 </div>
@@ -364,7 +364,7 @@ export default function ManufacturingOrdersPage() {
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     required
                   >
                     <option value="low">Low</option>
@@ -379,7 +379,7 @@ export default function ManufacturingOrdersPage() {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     required
                   >
                     <option value="draft">Draft</option>
@@ -401,7 +401,7 @@ export default function ManufacturingOrdersPage() {
                       type="date"
                       value={formData.plannedStartDate}
                       onChange={(e) => setFormData({ ...formData, plannedStartDate: e.target.value })}
-                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                       required
                     />
                   </div>
@@ -412,7 +412,7 @@ export default function ManufacturingOrdersPage() {
                       type="date"
                       value={formData.plannedEndDate}
                       onChange={(e) => setFormData({ ...formData, plannedEndDate: e.target.value })}
-                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     />
                   </div>
 
@@ -422,7 +422,7 @@ export default function ManufacturingOrdersPage() {
                       type="date"
                       value={formData.actualStartDate}
                       onChange={(e) => setFormData({ ...formData, actualStartDate: e.target.value })}
-                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     />
                   </div>
 
@@ -432,7 +432,7 @@ export default function ManufacturingOrdersPage() {
                       type="date"
                       value={formData.actualEndDate}
                       onChange={(e) => setFormData({ ...formData, actualEndDate: e.target.value })}
-                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                      className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                     />
                   </div>
                 </div>
@@ -444,7 +444,7 @@ export default function ManufacturingOrdersPage() {
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
                   rows="3"
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-teal-500 text-gray-900"
                   placeholder="Additional notes or instructions..."
                 />
               </div>
