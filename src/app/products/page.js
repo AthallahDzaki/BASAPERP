@@ -167,7 +167,7 @@ export default function ProductsPage() {
               placeholder="Search products by name, SKU..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent text-gray-900"
             />
           </div>
         </div>
@@ -194,7 +194,7 @@ export default function ProductsPage() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter product name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-gray-900"
                   required
                 />
               </div>
@@ -208,7 +208,7 @@ export default function ProductsPage() {
                   value={formData.sku}
                   onChange={handleChange}
                   placeholder="Enter SKU"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-gray-900"
                   required
                 />
               </div>
@@ -222,7 +222,7 @@ export default function ProductsPage() {
                   onChange={handleChange}
                   rows="3"
                   placeholder="Enter product description"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all resize-none text-gray-900"
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ export default function ProductsPage() {
                   name="uom"
                   value={formData.uom}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white text-gray-900"
                 >
                   <option value="Unit">Unit</option>
                   <option value="Kg">Kg</option>
@@ -260,7 +260,7 @@ export default function ProductsPage() {
                   name="category"
                   value={formData.category}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white text-gray-900"
                 >
                   <option value="raw_material">Raw Material</option>
                   <option value="semi_finished">Semi Finished</option>
@@ -276,7 +276,7 @@ export default function ProductsPage() {
                   name="type"
                   value={formData.type}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all bg-white text-gray-900"
                 >
                   <option value="storable">Storable</option>
                   <option value="service">Service</option>
@@ -303,7 +303,7 @@ export default function ProductsPage() {
                   value={formData.price}
                   onChange={handleChange}
                   placeholder="0"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-gray-900"
                 />
               </div>
               <div>
@@ -316,7 +316,7 @@ export default function ProductsPage() {
                   value={formData.cost}
                   onChange={handleChange}
                   placeholder="0"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-gray-900"
                 />
               </div>
               <div>
@@ -329,7 +329,7 @@ export default function ProductsPage() {
                   value={formData.stockQty}
                   onChange={handleChange}
                   placeholder="0"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-gray-900"
                 />
               </div>
               <div>
@@ -342,7 +342,7 @@ export default function ProductsPage() {
                   value={formData.minStockQty}
                   onChange={handleChange}
                   placeholder="0"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all text-gray-900"
                 />
               </div>
             </div>

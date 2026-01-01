@@ -293,7 +293,7 @@ export default function SalesOrdersPage() {
             placeholder="Search Sales Orders..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all"
+            className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl focus:border-orange-500 focus:ring-2 focus:ring-orange-200 transition-all text-gray-900"
           />
         </div>
       </div>
@@ -385,7 +385,7 @@ export default function SalesOrdersPage() {
                   <select
                     value={formData.customer}
                     onChange={(e) => setFormData({ ...formData, customer: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                     required
                   >
                     <option value="">Select Customer</option>
@@ -401,7 +401,7 @@ export default function SalesOrdersPage() {
                     type="date"
                     value={formData.orderDate}
                     onChange={(e) => setFormData({ ...formData, orderDate: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                     required
                   />
                 </div>
@@ -412,7 +412,7 @@ export default function SalesOrdersPage() {
                     type="date"
                     value={formData.deliveryDate}
                     onChange={(e) => setFormData({ ...formData, deliveryDate: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                   />
                 </div>
 
@@ -421,7 +421,7 @@ export default function SalesOrdersPage() {
                   <select
                     value={formData.status}
                     onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                     required
                   >
                     <option value="draft">Draft</option>
@@ -438,7 +438,7 @@ export default function SalesOrdersPage() {
                   <select
                     value={formData.discountType}
                     onChange={(e) => setFormData({ ...formData, discountType: e.target.value })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                   >
                     <option value="percentage">Percentage (%)</option>
                     <option value="fixed">Fixed Amount</option>
@@ -453,7 +453,7 @@ export default function SalesOrdersPage() {
                     step="0.01"
                     value={formData.discountValue}
                     onChange={(e) => setFormData({ ...formData, discountValue: parseFloat(e.target.value) || 0 })}
-                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                    className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                   />
                 </div>
               </div>
@@ -464,7 +464,7 @@ export default function SalesOrdersPage() {
                   value={formData.shippingAddress}
                   onChange={(e) => setFormData({ ...formData, shippingAddress: e.target.value })}
                   rows="2"
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                 />
               </div>
 
@@ -487,7 +487,7 @@ export default function SalesOrdersPage() {
                       <select
                         value={item.product}
                         onChange={(e) => handleItemChange(index, 'product', e.target.value)}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                         required
                       >
                         <option value="">Select Product</option>
@@ -503,7 +503,7 @@ export default function SalesOrdersPage() {
                         min="1"
                         value={item.quantity}
                         onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
-                        className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                        className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                         placeholder="Qty"
                         required
                       />
@@ -514,7 +514,7 @@ export default function SalesOrdersPage() {
                         step="0.01"
                         value={item.unitPrice}
                         onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
-                        className="w-40 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
+                        className="w-40 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500 text-gray-900"
                         placeholder="Unit Price"
                         required
                       />
