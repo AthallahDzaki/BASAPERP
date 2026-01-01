@@ -51,6 +51,7 @@ export const customersAPI = {
   create: (data) => apiCall('/customers', { method: 'POST', body: JSON.stringify(data) }),
   update: (id, data) => apiCall(`/customers/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id) => apiCall(`/customers/${id}`, { method: 'DELETE' }),
+  getStats: () => apiCall('/customers/stats')
 };
 
 // Vendors API
@@ -63,6 +64,7 @@ export const vendorsAPI = {
   create: (data) => apiCall('/vendors', { method: 'POST', body: JSON.stringify(data) }),
   update: (id, data) => apiCall(`/vendors/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id) => apiCall(`/vendors/${id}`, { method: 'DELETE' }),
+  getStats: () => apiCall(`/vendors/stats`),
 };
 
 // BOM API

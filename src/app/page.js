@@ -14,7 +14,7 @@ import {
   AlertCircle
 } from 'lucide-react'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import { productsAPI, salesOrdersAPI, healthAPI } from '@/lib/api'
+import { productsAPI, salesOrdersAPI, vendorsAPI, customersAPI, healthAPI } from '@/lib/api'
 
 export default function Home() {
   const [stats, setStats] = useState({
@@ -35,6 +35,12 @@ export default function Home() {
         
         // Fetch sales stats
         const salesStats = await salesOrdersAPI.getStats()
+
+        const vendorStats = await vendorsAPI.getStats();
+
+        const customerStats = await customersAPI.getStats()
+
+        console.log(customerStats);
         
         setStats({
           products: {
@@ -45,7 +51,11 @@ export default function Home() {
             total: salesStats.data.overview.totalOrders || 0,
             revenue: salesStats.data.overview.totalRevenue || 0,
           },
-          apiStatus: 'connected'
+          vendor: {
+            total: vendorStats.data.vendorCount.active || 0
+          },
+          customer: customerStats.data.customerCount || 0,
+          apiStatus: health.status
         })
       } catch (error) {
         console.error('Error fetching stats:', error)
@@ -165,9 +175,9 @@ export default function Home() {
         
         {/* API Status */}
         <div className="mt-4 inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white shadow-md">
-          <div className={`w-3 h-3 rounded-full ${stats.apiStatus === 'connected' ? 'bg-green-500' : stats.apiStatus === 'error' ? 'bg-red-500' : 'bg-yellow-500'} animate-pulse`}></div>
+          <div className={`w-3 h-3 rounded-full ${stats.apiStatus === 'healthy' ? 'bg-green-500' : stats.apiStatus === 'error' ? 'bg-red-500' : 'bg-yellow-500'} animate-pulse`}></div>
           <span className="text-sm font-medium text-gray-700">
-            API Status: {stats.apiStatus === 'connected' ? '✅ Connected' : stats.apiStatus === 'error' ? '❌ Error' : '🔄 Checking...'}
+            API Status: {stats.apiStatus === 'healthy' ? '✅ Connected' : stats.apiStatus === 'error' ? '❌ Error' : '🔄 Checking...'}
           </span>
         </div>
       </div>
@@ -228,7 +238,7 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Vendors</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">38</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">{stats.vendor.total}</p>
             </div>
             <div className="p-3 bg-purple-100 rounded-xl">
               <Users className="w-8 h-8 text-purple-600" />
@@ -240,7 +250,7 @@ export default function Home() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">Customers</p>
-              <p className="text-3xl font-bold text-gray-900 mt-2">156</p>
+              <p className="text-3xl font-bold text-gray-900 mt-2">{stats.customer}</p>
             </div>
             <div className="p-3 bg-teal-100 rounded-xl">
               <TrendingUp className="w-8 h-8 text-teal-600" />

@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { v4 } from 'uuid';
 
 const RFQSchema = new mongoose.Schema({
   rfqNumber: {
@@ -42,14 +43,7 @@ const RFQSchema = new mongoose.Schema({
 
 RFQSchema.pre('save', async function() {
   if (this.isNew && !this.rfqNumber) {
-    const ret = await Counter.findOneAndUpdate(
-      { _id: 'rfq' },
-      { $inc: { seq: 1 } },
-      { new: true, upsert: true }
-    ).exec()
-
-    const seq = ret.seq
-    this.rfqNumber = `RFQ${String(seq).padStart(5, '0')}`
+    this.rfqNumber = `RFQ-${v4()}`
   }
 })
 

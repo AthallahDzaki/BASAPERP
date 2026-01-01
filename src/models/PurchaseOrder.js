@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-
-let counter = 2000;
+import {v4} from 'uuid';
 
 const PurchaseOrderSchema = new mongoose.Schema({
   poNumber: {
@@ -59,11 +58,10 @@ const PurchaseOrderSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-PurchaseOrderSchema.pre('save', async function(next) {
+PurchaseOrderSchema.pre('save', async function() {
   if (!this.poNumber) {
-    this.poNumber = `PO${String(counter++).padStart(5, '0')}`;
+    this.poNumber = `PO-${v4()}`;
   }
-  next();
 });
 
 export default mongoose.models.PurchaseOrder || mongoose.model('PurchaseOrder', PurchaseOrderSchema);

@@ -73,7 +73,9 @@ const employeeSchema = new mongoose.Schema({
   },
   manager: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Employee'
+    ref: 'Employee',
+    default: null,
+    set: v => (v === '' ? null : v)
   },
   isActive: {
     type: Boolean,

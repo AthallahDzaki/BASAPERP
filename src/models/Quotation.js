@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-
-let counter = 4000;
+import { v4 } from 'uuid';
 
 const QuotationSchema = new mongoose.Schema({
   quotationNumber: {
@@ -61,9 +60,8 @@ const QuotationSchema = new mongoose.Schema({
 
 QuotationSchema.pre('save', async function(next) {
   if (!this.quotationNumber) {
-    this.quotationNumber = `QT${String(counter++).padStart(5, '0')}`;
+    this.quotationNumber = `QT-${v4()}`;
   }
-  next();
 });
 
 export default mongoose.models.Quotation || mongoose.model('Quotation', QuotationSchema);

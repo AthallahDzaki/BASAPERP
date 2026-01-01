@@ -32,21 +32,25 @@ export default function QuotationsPage() {
   })
 
   const formatCurrency = (amount) => {
+    const safeAmount = Number(amount) || 0
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0
-    }).format(amount)
+    }).format(safeAmount)
   }
 
   const calculateTotals = () => {
     const subtotal = formData.items.reduce((sum, item) => {
-      const itemTotal = item.quantity * item.unitPrice
-      const itemDiscount = itemTotal * (item.discount / 100)
+      const qty = Number(item.quantity) || 0
+      const price = Number(item.unitPrice) || 0
+      const discount = Number(item.discount) || 0
+      const itemTotal = qty * price
+      const itemDiscount = itemTotal * (discount / 100)
       return sum + (itemTotal - itemDiscount)
     }, 0)
     
-    const taxAmount = subtotal * (formData.taxRate / 100)
+    const taxAmount = subtotal * (Number(formData.taxRate) / 100 || 0)
     const total = subtotal + taxAmount
 
     return { subtotal, taxAmount, total }
@@ -73,12 +77,21 @@ export default function QuotationsPage() {
 
   const handleItemChange = (index, field, value) => {
     const newItems = [...formData.items]
-    newItems[index][field] = value
+    // normalize numeric inputs where appropriate
+    if (field === 'quantity') {
+      newItems[index][field] = Number(value) || 0
+    } else if (field === 'unitPrice' || field === 'discount') {
+      newItems[index][field] = Number(value) || 0
+    } else {
+      newItems[index][field] = value
+    }
     
     if (field === 'product' && value) {
-      const selectedProduct = products?.products?.find(p => p._id === value)
+      // products is expected to be an array
+      const selectedProduct = Array.isArray(products) ? products.find(p => p._id === value) : undefined
       if (selectedProduct) {
-        newItems[index].unitPrice = selectedProduct.price
+        // try common property names
+        newItems[index].unitPrice = Number(selectedProduct.price ?? selectedProduct.unitPrice ?? 0)
       }
     }
     
@@ -93,7 +106,7 @@ export default function QuotationsPage() {
       return
     }
 
-    if (formData.items.some(item => !item.product || item.quantity <= 0)) {
+    if (formData.items.some(item => !item.product || Number(item.quantity) <= 0)) {
       showAlert('Please fill all item details', 'error')
       return
     }
@@ -117,26 +130,26 @@ export default function QuotationsPage() {
       resetForm()
       refetchQuotations()
     } catch (error) {
-      showAlert(error.message || 'Failed to save Quotation', 'error')
+      showAlert(error?.message || 'Failed to save Quotation', 'error')
     }
   }
 
   const handleEdit = (quotation) => {
     setEditingQuotation(quotation)
     setFormData({
-      customer: quotation.customer._id,
+      customer: quotation.customer?._id || '',
       quotationDate: quotation.quotationDate?.split('T')[0] || '',
       expiryDate: quotation.expiryDate?.split('T')[0] || '',
       items: quotation.items.map(item => ({
-        product: item.product._id,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice,
-        discount: item.discount || 0
+        product: item.product?._id || '',
+        quantity: item.quantity ?? 1,
+        unitPrice: item.unitPrice ?? 0,
+        discount: item.discount ?? 0
       })),
-      taxRate: quotation.taxRate || 11,
-      terms: quotation.terms || '',
-      status: quotation.status,
-      notes: quotation.notes || ''
+      taxRate: quotation.taxRate ?? 11,
+      terms: quotation.terms ?? '',
+      status: quotation.status ?? 'draft',
+      notes: quotation.notes ?? ''
     })
     setShowModal(true)
   }
@@ -149,7 +162,7 @@ export default function QuotationsPage() {
       showAlert('Quotation deleted successfully!')
       refetchQuotations()
     } catch (error) {
-      showAlert(error.message || 'Failed to delete Quotation', 'error')
+      showAlert(error?.message || 'Failed to delete Quotation', 'error')
     }
   }
 
@@ -167,10 +180,10 @@ export default function QuotationsPage() {
     setEditingQuotation(null)
   }
 
-  const filteredQuotations = quotations?.filter(q =>
-    q.quotationNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    q.customer?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || []
+  const filteredQuotations = (quotations || []).filter(q =>
+    (q.quotationNumber || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (q.customer?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   const getStatusColor = (status) => {
     const colors = {
@@ -187,9 +200,7 @@ export default function QuotationsPage() {
     <ProtectedRoute>
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-8">
       {alert.show && (
-        <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${
-          alert.type === 'error' ? 'bg-red-500' : 'bg-green-500'
-        } text-white`}>
+        <div className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg ${alert.type === 'error' ? 'bg-red-500' : 'bg-green-500'} text-white`}>
           {alert.message}
         </div>
       )}
@@ -326,7 +337,7 @@ export default function QuotationsPage() {
                     required
                   >
                     <option value="">Select Customer</option>
-                    {customers?.customers?.map((customer) => (
+                    {customers?.map((customer) => (
                       <option key={customer._id} value={customer._id}>{customer.name}</option>
                     ))}
                   </select>
@@ -398,55 +409,87 @@ export default function QuotationsPage() {
 
                 <div className="space-y-3">
                   {formData.items.map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                      <select
-                        value={item.product}
-                        onChange={(e) => handleItemChange(index, 'product', e.target.value)}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
-                        required
-                      >
-                        <option value="">Select Product</option>
-                        {products?.products?.map((product) => (
-                          <option key={product._id} value={product._id}>
-                            {product.name}
-                          </option>
-                        ))}
-                      </select>
+                    <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+                      {/* Product */}
+                      <div className="flex-1 flex flex-col">
+                        <label htmlFor={`product-${index}`} className="block text-sm font-medium text-gray-700 mb-2">
+                          Product *
+                        </label>
+                        <select
+                          id={`product-${index}`}
+                          value={item.product}
+                          onChange={(e) => handleItemChange(index, 'product', e.target.value)}
+                          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                          required
+                        >
+                          <option value="">Select Product</option>
+                          {Array.isArray(products) && products.map((product) => (
+                            <option key={product._id} value={product._id}>
+                              {product.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
-                        className="w-24 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
-                        placeholder="Qty"
-                        required
-                      />
+                      {/* Quantity */}
+                      <div className="w-24 flex flex-col">
+                        <label htmlFor={`quantity-${index}`} className="block text-sm font-medium text-gray-700 mb-2">
+                          Quantity *
+                        </label>
+                        <input
+                          id={`quantity-${index}`}
+                          type="number"
+                          min="1"
+                          value={item.quantity}
+                          onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
+                          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                          placeholder="Qty"
+                          required
+                        />
+                      </div>
 
-                      <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={item.unitPrice}
-                        onChange={(e) => handleItemChange(index, 'unitPrice', parseFloat(e.target.value))}
-                        className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
-                        placeholder="Price"
-                        required
-                      />
+                      {/* Unit Price */}
+                      <div className="w-32 flex flex-col">
+                        <label htmlFor={`unitPrice-${index}`} className="block text-sm font-medium text-gray-700 mb-2">
+                          Unit Price *
+                        </label>
+                        <input
+                          id={`unitPrice-${index}`}
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          value={item.unitPrice}
+                          onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
+                          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                          placeholder="Price"
+                          required
+                        />
+                      </div>
 
-                      <input
-                        type="number"
-                        min="0"
-                        max="100"
-                        step="0.01"
-                        value={item.discount}
-                        onChange={(e) => handleItemChange(index, 'discount', parseFloat(e.target.value) || 0)}
-                        className="w-24 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
-                        placeholder="Disc %"
-                      />
+                      {/* Discount */}
+                      <div className="w-24 flex flex-col">
+                        <label htmlFor={`discount-${index}`} className="block text-sm font-medium text-gray-700 mb-2">
+                          Disc %
+                        </label>
+                        <input
+                          id={`discount-${index}`}
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="0.01"
+                          value={item.discount}
+                          onChange={(e) => handleItemChange(index, 'discount', e.target.value)}
+                          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500"
+                          placeholder="Disc %"
+                        />
+                      </div>
 
-                      <div className="text-gray-700 font-medium w-32 text-right">
-                        {formatCurrency(item.quantity * item.unitPrice * (1 - item.discount / 100))}
+                      {/* Total */}
+                      <div className="w-32 flex flex-col items-end">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Total</label>
+                        <div className="w-full px-4 py-2 border-2 border-transparent rounded-lg text-gray-700 font-medium text-right" aria-live="polite">
+                          {formatCurrency((Number(item.quantity || 0) * Number(item.unitPrice || 0) * (1 - Number(item.discount || 0) / 100)) || 0)}
+                        </div>
                       </div>
 
                       {formData.items.length > 1 && (
@@ -454,6 +497,7 @@ export default function QuotationsPage() {
                           type="button"
                           onClick={() => handleRemoveItem(index)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          aria-label={`Remove item ${index + 1}`}
                         >
                           <Trash2 className="w-5 h-5" />
                         </button>

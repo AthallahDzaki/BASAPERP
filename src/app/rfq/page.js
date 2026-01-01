@@ -347,55 +347,86 @@ export default function RFQPage() {
                   </button>
                 </div>
 
-                <div className="space-y-3">
-                  {formData.items.map((item, index) => (
-                    <div key={index} className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                      <select
-                        value={item.product}
-                        onChange={(e) => handleItemChange(index, 'product', e.target.value)}
-                        className="flex-1 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500"
-                        required
-                      >
-                        <option value="">Select Product</option>
-                        {products?.map((product) => (
-                          <option key={product._id} value={product._id}>
-                            {product.name}
-                          </option>
-                        ))}
-                      </select>
+<div className="space-y-3">
+  {formData.items.map((item, index) => (
+    <div key={index} className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+      {/* Product: wrapper column sehingga label di atas select */}
+      <div className="flex-1 flex flex-col">
+        <label
+          htmlFor={`product-${index}`}
+          className="text-xs font-medium text-gray-600 mb-1"
+        >
+          Product
+        </label>
+        <select
+          id={`product-${index}`}
+          value={item.product}
+          onChange={(e) => handleItemChange(index, 'product', e.target.value)}
+          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500"
+          required
+        >
+          <option value="">Select Product</option>
+          {products?.map((product) => (
+            <option key={product._id} value={product._id}>
+              {product.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-                      <input
-                        type="number"
-                        min="1"
-                        value={item.quantity}
-                        onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
-                        className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500"
-                        placeholder="Qty"
-                        required
-                      />
+      {/* Quantity: fixed width column */}
+      <div className="w-32 flex flex-col">
+        <label
+          htmlFor={`quantity-${index}`}
+          className="text-xs font-medium text-gray-600 mb-1"
+        >
+          Quantity
+        </label>
+        <input
+          id={`quantity-${index}`}
+          type="number"
+          min="1"
+          value={item.quantity}
+          onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value || '0'))}
+          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500"
+          placeholder="Qty"
+          required
+        />
+      </div>
 
-                      <input
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        value={item.estimatedPrice}
-                        onChange={(e) => handleItemChange(index, 'estimatedPrice', parseFloat(e.target.value))}
-                        className="w-40 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500"
-                        placeholder="Est. Price"
-                      />
+      {/* Est. Price with label above (sudah column) */}
+      <div className="w-40 flex flex-col">
+        <label
+          htmlFor={`estimatedPrice-${index}`}
+          className="text-xs font-medium text-gray-600 mb-1"
+        >
+          Est. Price
+        </label>
+        <input
+          id={`estimatedPrice-${index}`}
+          type="number"
+          min="0"
+          step="0.01"
+          value={item.estimatedPrice}
+          onChange={(e) => handleItemChange(index, 'estimatedPrice', e.target.value === '' ? '' : parseFloat(e.target.value))}
+          className="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-blue-500"
+          placeholder="Est. Price"
+          name="Price"
+        />
+      </div>
 
-                      {formData.items.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveItem(index)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
+      {formData.items.length > 1 && (
+        <button
+          type="button"
+          onClick={() => handleRemoveItem(index)}
+          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+        >
+          <Trash2 className="w-5 h-5" />
+        </button>
+      )}
+    </div>
+  ))}
+</div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4 border-t">

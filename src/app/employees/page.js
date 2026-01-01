@@ -13,7 +13,7 @@ export default function EmployeesPage() {
   const [filterDepartment, setFilterDepartment] = useState('');
   const [filterActive, setFilterActive] = useState('');
 
-  const { data: employees, loading, error, setData } = useAPI(
+  const { data: employees, loading, error, refetch: refetchEmployees } = useAPI(
     () => employeesAPI.getAll({ 
       search: searchTerm,
       department: filterDepartment,
@@ -137,7 +137,7 @@ export default function EmployeesPage() {
         department: filterDepartment,
         isActive: filterActive
       });
-      setData(result.data);
+      refetchEmployees();
       resetForm();
     } catch (err) {
       alert(`Error: ${err.message}`);
@@ -192,7 +192,7 @@ export default function EmployeesPage() {
           department: filterDepartment,
           isActive: filterActive
         });
-        setData(result.data);
+        refetchEmployees();
         alert('Employee deactivated successfully!');
       } catch (err) {
         alert(`Error: ${err.message}`);

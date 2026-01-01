@@ -14,7 +14,10 @@ export default function SalesOrdersPage() {
 
   const { data: salesOrders, loading: soLoading, error: soError, refetch: refetchSOs } = useAPI(salesOrdersAPI.getAll)
   const { data: customers, loading: customersLoading } = useAPI(customersAPI.getAll)
-  const { data: products, loading: productsLoading } = useAPI(productsAPI.getAll)
+  const { data: productsData, loading: productsLoading } = useAPI(productsAPI.getAll)
+
+  // normalize product list: support either array or { products: [...] }
+  const products = Array.isArray(productsData) ? productsData : (productsData?.products || [])
 
   const { execute: createSO, loading: creating } = useAPICall(salesOrdersAPI.create)
   const { execute: updateSO, loading: updating } = useAPICall(salesOrdersAPI.update)
@@ -34,26 +37,32 @@ export default function SalesOrdersPage() {
   })
 
   const formatCurrency = (amount) => {
+    const safe = Number(amount) || 0
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR',
       minimumFractionDigits: 0
-    }).format(amount)
+    }).format(safe)
   }
 
-  const calculateTotals = () => {
-    const subtotal = formData.items.reduce((sum, item) => 
-      sum + (item.quantity * item.unitPrice), 0)
-    
+  // Use formData values (which are normalized) to calculate totals for UI
+  const calculateTotals = (data = formData) => {
+    const subtotal = (data.items || []).reduce((sum, item) => {
+      const qty = Number(item.quantity) || 0
+      const price = Number(item.unitPrice) || 0
+      return sum + (qty * price)
+    }, 0)
+
     let discountAmount = 0
-    if (formData.discountType === 'percentage') {
-      discountAmount = subtotal * (formData.discountValue / 100)
+    const discountValue = Number(data.discountValue) || 0
+    if (data.discountType === 'percentage') {
+      discountAmount = subtotal * (discountValue / 100)
     } else {
-      discountAmount = formData.discountValue
+      discountAmount = discountValue
     }
-    
+
     const afterDiscount = subtotal - discountAmount
-    const taxAmount = afterDiscount * (formData.taxRate / 100)
+    const taxAmount = afterDiscount * (Number(data.taxRate) / 100 || 0)
     const total = afterDiscount + taxAmount
 
     return { subtotal, discountAmount, afterDiscount, taxAmount, total }
@@ -78,40 +87,85 @@ export default function SalesOrdersPage() {
     setFormData({ ...formData, items: newItems })
   }
 
+  // handleItemChange sekarang melakukan parsing/normalisasi numeric dengan aman
   const handleItemChange = (index, field, value) => {
     const newItems = [...formData.items]
-    newItems[index][field] = value
-    
-    // Auto-fill price when product is selected
+    if (field === 'quantity') {
+      newItems[index][field] = Number(value) || 0
+    } else if (field === 'unitPrice') {
+      newItems[index][field] = Number(value) || 0
+    } else {
+      newItems[index][field] = value
+    }
+
+    // Auto-fill price when product is selected (support various product shapes)
     if (field === 'product' && value) {
-      const selectedProduct = products?.products?.find(p => p._id === value)
+      const selectedProduct = products.find(p => p._id === value)
       if (selectedProduct) {
-        newItems[index].unitPrice = selectedProduct.price
+        newItems[index].unitPrice = Number(selectedProduct.price ?? selectedProduct.unitPrice ?? 0)
       }
     }
-    
+
     setFormData({ ...formData, items: newItems })
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    
+
     if (!formData.customer) {
       showAlert('Please select a customer', 'error')
       return
     }
 
-    if (formData.items.some(item => !item.product || item.quantity <= 0)) {
+    if (formData.items.some(item => !item.product || (Number(item.quantity) || 0) <= 0)) {
       showAlert('Please fill all item details', 'error')
       return
     }
 
+    // Build sanitized items (ensure numeric fields and include subtotal per item)
+    const sanitizedItems = (formData.items || []).map(item => {
+      const quantity = Number(item.quantity) || 0
+      const unitPrice = Number(item.unitPrice) || 0
+      const subtotalItem = quantity * unitPrice
+      return {
+        product: item.product,
+        quantity,
+        unitPrice,
+        subtotal: subtotalItem
+      }
+    })
+
+    const subtotalSum = sanitizedItems.reduce((s, it) => s + (Number(it.subtotal) || 0), 0)
+
+    let discountAmt = 0
+    const discountValue = Number(formData.discountValue) || 0
+    if (formData.discountType === 'percentage') {
+      discountAmt = subtotalSum * (discountValue / 100)
+    } else {
+      discountAmt = discountValue
+    }
+
+    const afterDisc = subtotalSum - discountAmt
+    const taxAmt = afterDisc * (Number(formData.taxRate) / 100 || 0)
+    const grandTotal = afterDisc + taxAmt
+
+    // Map client statuses to backend-accepted statuses.
+    // Currently backend expects e.g. 'quotation','confirmed','locked','cancelled'
+    // We map 'draft' -> 'quotation'. Adjust mapping here if backend supports different set.
+    const statusMap = {
+      draft: 'quotation'
+      // add other mappings if needed, e.g. processing: 'confirmed'
+    }
+    const statusToSend = statusMap[formData.status] ?? formData.status
+
     const dataToSubmit = {
       ...formData,
-      subtotal,
-      discountAmount,
-      taxAmount,
-      total
+      items: sanitizedItems,
+      subtotal: subtotalSum,
+      discountAmount: discountAmt,
+      taxAmount: taxAmt,
+      total: grandTotal,
+      status: statusToSend
     }
 
     try {
@@ -126,26 +180,26 @@ export default function SalesOrdersPage() {
       resetForm()
       refetchSOs()
     } catch (error) {
-      showAlert(error.message || 'Failed to save Sales Order', 'error')
+      showAlert(error?.message || 'Failed to save Sales Order', 'error')
     }
   }
 
   const handleEdit = (so) => {
     setEditingSO(so)
     setFormData({
-      customer: so.customer._id,
+      customer: so.customer?._id || '',
       orderDate: so.orderDate?.split('T')[0] || '',
       deliveryDate: so.deliveryDate?.split('T')[0] || '',
-      items: so.items.map(item => ({
-        product: item.product._id,
-        quantity: item.quantity,
-        unitPrice: item.unitPrice
+      items: (so.items || []).map(item => ({
+        product: item.product?._id || item.product || '',
+        quantity: Number(item.quantity) || 0,
+        unitPrice: Number(item.unitPrice) || 0
       })),
       discountType: so.discountType || 'percentage',
-      discountValue: so.discountValue || 0,
-      taxRate: so.taxRate || 11,
+      discountValue: Number(so.discountValue) || 0,
+      taxRate: Number(so.taxRate) || 11,
       shippingAddress: so.shippingAddress || '',
-      status: so.status,
+      status: so.status || 'draft',
       notes: so.notes || ''
     })
     setShowModal(true)
@@ -153,13 +207,13 @@ export default function SalesOrdersPage() {
 
   const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this Sales Order?')) return
-    
+
     try {
       await deleteSO(id)
       showAlert('Sales Order deleted successfully!')
       refetchSOs()
     } catch (error) {
-      showAlert(error.message || 'Failed to delete Sales Order', 'error')
+      showAlert(error?.message || 'Failed to delete Sales Order', 'error')
     }
   }
 
@@ -179,10 +233,10 @@ export default function SalesOrdersPage() {
     setEditingSO(null)
   }
 
-  const filteredSOs = salesOrders?.salesOrders?.filter(so =>
-    so.soNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    so.customer?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  ) || []
+  const filteredSOs = (salesOrders || []).filter(so =>
+    (so.soNumber || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (so.customer?.name || '').toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   const getStatusColor = (status) => {
     const colors = {
@@ -335,7 +389,7 @@ export default function SalesOrdersPage() {
                     required
                   >
                     <option value="">Select Customer</option>
-                    {customers?.customers?.map((customer) => (
+                    {customers?.map((customer) => (
                       <option key={customer._id} value={customer._id}>{customer.name}</option>
                     ))}
                   </select>
@@ -437,9 +491,9 @@ export default function SalesOrdersPage() {
                         required
                       >
                         <option value="">Select Product</option>
-                        {products?.products?.map((product) => (
+                        {products?.map((product) => (
                           <option key={product._id} value={product._id}>
-                            {product.name} - {formatCurrency(product.price)}
+                            {product.name} - {formatCurrency(product.price ?? product.unitPrice ?? 0)}
                           </option>
                         ))}
                       </select>
@@ -448,7 +502,7 @@ export default function SalesOrdersPage() {
                         type="number"
                         min="1"
                         value={item.quantity}
-                        onChange={(e) => handleItemChange(index, 'quantity', parseInt(e.target.value))}
+                        onChange={(e) => handleItemChange(index, 'quantity', e.target.value)}
                         className="w-32 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
                         placeholder="Qty"
                         required
@@ -459,14 +513,14 @@ export default function SalesOrdersPage() {
                         min="0"
                         step="0.01"
                         value={item.unitPrice}
-                        onChange={(e) => handleItemChange(index, 'unitPrice', parseFloat(e.target.value))}
+                        onChange={(e) => handleItemChange(index, 'unitPrice', e.target.value)}
                         className="w-40 px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-orange-500"
                         placeholder="Unit Price"
                         required
                       />
 
                       <div className="text-gray-700 font-medium w-40">
-                        {formatCurrency(item.quantity * item.unitPrice)}
+                        {formatCurrency((Number(item.quantity || 0) * Number(item.unitPrice || 0)) || 0)}
                       </div>
 
                       {formData.items.length > 1 && (

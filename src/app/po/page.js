@@ -7,7 +7,7 @@ import { ShoppingCart, Plus, Edit2, Trash2, Save } from 'lucide-react';
 import ProtectedRoute from '@/components/ProtectedRoute';
 
 export default function PurchaseOrdersPage() {
-  const { data: pos, loading, error, setData } = useAPI(purchaseOrdersAPI.getAll, []);
+  const { data: pos, loading, error, refetch: refetchPO } = useAPI(purchaseOrdersAPI.getAll, []);
   const { data: vendors } = useAPI(vendorsAPI.getAll, []);
   const { data: products } = useAPI(productsAPI.getAll, []);
   const { execute: createPO, loading: creating } = useAPICall();
@@ -19,7 +19,7 @@ export default function PurchaseOrdersPage() {
   const [formData, setFormData] = useState({
     vendor: '',
     orderDate: new Date().toISOString().split('T')[0],
-    expectedDelivery: '',
+    expectedDate: '',
     items: [{ product: '', quantity: 1, unitPrice: 0 }],
     status: 'draft',
     notes: ''
@@ -58,13 +58,13 @@ export default function PurchaseOrdersPage() {
       if (editingPO) {
         const result = await updatePO(() => purchaseOrdersAPI.update(editingPO._id, dataToSubmit));
         if (result.success) {
-          setData(pos.map(p => p._id === editingPO._id ? result.data : p));
+          refetchPO();
           showAlert('Purchase Order updated successfully!');
         }
       } else {
         const result = await createPO(() => purchaseOrdersAPI.create(dataToSubmit));
         if (result.success) {
-          setData([result.data, ...pos]);
+          refetchPO();
           showAlert('Purchase Order created successfully!');
         }
       }
@@ -82,7 +82,7 @@ export default function PurchaseOrdersPage() {
     setFormData({
       vendor: po.vendor._id || po.vendor,
       orderDate: new Date(po.orderDate).toISOString().split('T')[0],
-      expectedDelivery: po.expectedDelivery ? new Date(po.expectedDelivery).toISOString().split('T')[0] : '',
+      expectedDate: po.expectedDate ? new Date(po.expectedDate).toISOString().split('T')[0] : '',
       items: po.items.map(item => ({
         product: item.product._id || item.product,
         quantity: item.quantity,
@@ -98,7 +98,7 @@ export default function PurchaseOrdersPage() {
     if (confirm('Are you sure you want to delete this Purchase Order?')) {
       const result = await deletePO(() => purchaseOrdersAPI.delete(id));
       if (result.success) {
-        setData(pos.filter(p => p._id !== id));
+        refetchPO();
         showAlert('Purchase Order deleted successfully!');
       }
     }
@@ -108,7 +108,7 @@ export default function PurchaseOrdersPage() {
     setFormData({
       vendor: '',
       orderDate: new Date().toISOString().split('T')[0],
-      expectedDelivery: '',
+      expectedDate: '',
       items: [{ product: '', quantity: 1, unitPrice: 0 }],
       status: 'draft',
       notes: ''
@@ -265,8 +265,8 @@ export default function PurchaseOrdersPage() {
                   </label>
                   <input
                     type="date"
-                    value={formData.expectedDelivery}
-                    onChange={(e) => setFormData({ ...formData, expectedDelivery: e.target.value })}
+                    value={formData.expectedDate}
+                    onChange={(e) => setFormData({ ...formData, expectedDate: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>

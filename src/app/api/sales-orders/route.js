@@ -2,63 +2,95 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import SalesOrder from '@/models/SalesOrder';
 
-// GET /api/sales-orders
-export async function GET(request) {
-  try {
-    await connectDB();
-    const { searchParams } = new URL(request.url);
-    const status = searchParams.get('status');
-    
-    const query = {};
-    if (status) query.status = status;
-    
-    const salesOrders = await SalesOrder.find(query)
-      .populate('customer', 'name email')
-      .populate('items.product', 'name sku')
-      .sort({ orderDate: -1 });
-    return NextResponse.json({ success: true, data: salesOrders });
-  } catch (error) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    );
-  }
-}
-
-// POST /api/sales-orders
 export async function POST(request) {
   try {
     await connectDB();
     const body = await request.json();
-    
-    // Calculate totals
-    if (body.items && body.items.length > 0) {
-      body.items = body.items.map(item => {
-        const subtotal = item.quantity * item.unitPrice;
-        const discountAmount = subtotal * (item.discount / 100);
-        const taxAmount = (subtotal - discountAmount) * (item.tax / 100);
+
+    // Map client-side statuses if necessary (optional)
+    if (body.status === 'draft') {
+      // we accept 'draft' in schema, but if you prefer mapping to 'quotation', do it here:
+      // body.status = 'quotation';
+      // For now leave as-is because schema includes 'draft'.
+    }
+
+    // Normalize top-level fields (support client names)
+    const discountType = body.discountType || (body.discount ? 'percentage' : 'percentage');
+    const discountValue = Number(body.discountValue ?? body.discount ?? 0) || 0;
+    const taxRate = Number(body.taxRate ?? body.tax ?? 0) || 0;
+
+    if (Array.isArray(body.items) && body.items.length > 0) {
+      // Normalize items and compute per-item totals
+      body.items = body.items.map(itemRaw => {
+        const item = { ...itemRaw };
+        const quantity = Number(item.quantity) || 0;
+        const unitPrice = Number(item.unitPrice) || 0;
+        const itemDiscountPct = Number(item.discount ?? 0) || 0;
+        const itemTaxPct = Number(item.tax ?? 0) || 0;
+
+        const base = quantity * unitPrice;
+        const itemDiscountAmount = base * (itemDiscountPct / 100);
+        const itemTaxAmount = (base - itemDiscountAmount) * (itemTaxPct / 100);
+        const itemSubtotal = base - itemDiscountAmount + itemTaxAmount;
+
         return {
           ...item,
-          subtotal: subtotal - discountAmount + taxAmount,
+          quantity,
+          unitPrice,
+          discount: itemDiscountPct,
+          tax: itemTaxPct,
+          itemSubtotal: base,
+          itemDiscountAmount,
+          itemTaxAmount,
+          subtotal: itemSubtotal
         };
       });
-      
-      const itemsTotal = body.items.reduce((sum, item) => sum + item.subtotal, 0);
-      body.subtotal = itemsTotal;
-      const discountAmount = itemsTotal * (body.discount / 100);
-      const taxAmount = (itemsTotal - discountAmount) * (body.tax / 100);
-      body.total = itemsTotal - discountAmount + taxAmount;
+
+      // compute totals
+      const itemsTotal = body.items.reduce((s, it) => s + (Number(it.subtotal) || 0), 0);
+
+      let overallDiscountAmount = 0;
+      if (discountType === 'percentage') {
+        overallDiscountAmount = itemsTotal * (discountValue / 100);
+      } else {
+        overallDiscountAmount = discountValue;
+      }
+
+      const afterDiscount = itemsTotal - overallDiscountAmount;
+      const overallTaxAmount = afterDiscount * (taxRate / 100);
+      const grandTotal = afterDiscount + overallTaxAmount;
+
+      body.subtotal = Number(itemsTotal) || 0;
+      body.discountAmount = Number(overallDiscountAmount) || 0;
+      body.taxAmount = Number(overallTaxAmount) || 0;
+      body.total = Number(grandTotal) || 0;
+      body.discountType = discountType;
+      body.discountValue = discountValue;
+      body.taxRate = taxRate;
+    } else {
+      // ensure defaults if no items
+      body.items = [];
+      body.subtotal = 0;
+      body.discountAmount = 0;
+      body.taxAmount = 0;
+      body.total = 0;
     }
-    
+
     const salesOrder = await SalesOrder.create(body);
-    return NextResponse.json(
-      { success: true, data: salesOrder },
-      { status: 201 }
-    );
+    return NextResponse.json({ success: true, data: salesOrder }, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 400 }
-    );
+    console.error('POST /api/sales-orders error:', error);
+    return NextResponse.json({ success: false, message: error.message }, { status: 400 });
+  }
+}
+
+export async function GET() {
+  try {
+    await connectDB();
+    const list = await SalesOrder.find().populate('customer').populate('items.product').sort({ createdAt: -1 }).lean();
+    return NextResponse.json({ success: true, data: list }, { status: 200 });
+  } catch (error) {
+    console.error('GET /api/sales-orders error:', error);
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }
