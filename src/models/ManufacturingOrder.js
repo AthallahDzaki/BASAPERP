@@ -56,12 +56,11 @@ const ManufacturingOrderSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-ManufacturingOrderSchema.pre('save', function(next) {
+ManufacturingOrderSchema.pre('save', function() {
   if (!this.moNumber) {
     // MO + short unique id (10 chars)
     this.moNumber = `MO${v4().replace(/-/g, '').slice(0, 10).toUpperCase()}`;
   }
-  next();
 });
 
 export default mongoose.models.ManufacturingOrder || mongoose.model('ManufacturingOrder', ManufacturingOrderSchema);
