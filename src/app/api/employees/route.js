@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import Employee from '@/models/Employee';
+import { Employee } from '@/models';
 
 // GET /api/employees - Get all employees
 export async function GET(request) {
