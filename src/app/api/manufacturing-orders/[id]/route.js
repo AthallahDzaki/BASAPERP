@@ -6,7 +6,8 @@ import { ManufacturingOrder } from '@/models';
 export async function GET(request, { params }) {
   try {
     await connectDB();
-    const mo = await ManufacturingOrder.findById(params.id)
+    const { id } = await params;
+    const mo = await ManufacturingOrder.findById(id)
       .populate('product')
       .populate('bom');
     if (!mo) {
@@ -28,8 +29,9 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
+    const { id } = await params;
     const body = await request.json();
-    const mo = await ManufacturingOrder.findByIdAndUpdate(params.id, body, {
+    const mo = await ManufacturingOrder.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     });
@@ -52,7 +54,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const mo = await ManufacturingOrder.findByIdAndDelete(params.id);
+    const { id } = await params;
+    const mo = await ManufacturingOrder.findByIdAndDelete(id);
     if (!mo) {
       return NextResponse.json(
         { success: false, message: 'Manufacturing Order not found' },
