@@ -72,7 +72,7 @@ export default function Home() {
       title: 'Manufacturing Order',
       description: 'Manage production orders and manufacturing processes',
       icon: Factory,
-      href: '/',
+      href: '/manufacturing',
       color: 'bg-blue-500',
       gradient: 'from-blue-500 to-blue-600'
     },

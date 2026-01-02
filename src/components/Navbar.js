@@ -36,6 +36,7 @@ export default function Navbar() {
       label: 'Manufacturing',
       icon: Factory,
       items: [
+        { href: '/manufacturing', label: 'Manufacturing Order', icon: Factory }, 
         { href: '/products', label: 'Products', icon: Package },
         { href: '/bom', label: 'Bill of Materials', icon: ClipboardList },
       ]
