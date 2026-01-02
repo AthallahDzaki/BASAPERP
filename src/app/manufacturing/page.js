@@ -310,7 +310,7 @@ export default function ManufacturingOrdersPage() {
                     required
                   >
                     <option value="">Select Product</option>
-                    {products?.products?.map((product) => (
+                    {products?.map((product) => (
                       <option key={product._id} value={product._id}>
                         {product.name} ({product.sku})
                       </option>
