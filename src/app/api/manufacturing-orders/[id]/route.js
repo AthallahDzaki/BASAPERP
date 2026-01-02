@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import ManufacturingOrder from '@/models/ManufacturingOrder';
+import { ManufacturingOrder } from '@/models';
 
 // GET /api/manufacturing-orders/:id
 export async function GET(request, { params }) {

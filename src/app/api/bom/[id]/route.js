@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import BOM from '@/models/BOM';
+import { BOM } from '@/models';
 
 // GET /api/bom/:id
 export async function GET(request, { params }) {

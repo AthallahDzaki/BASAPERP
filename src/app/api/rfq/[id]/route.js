@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
-import RFQ from '@/models/RFQ';
+import { RFQ } from '@/models';
 
 // GET /api/rfq/:id
 export async function GET(request, { params }) {
