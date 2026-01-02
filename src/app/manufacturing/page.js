@@ -330,7 +330,7 @@ export default function ManufacturingOrdersPage() {
                     <option value="">Select BOM</option>
                     {filteredBOMs.map((bom) => (
                       <option key={bom._id} value={bom._id}>
-                        {bom.bomNumber} (Qty: {bom.quantity})
+                        {bom._id} (Qty: {bom.quantity})
                       </option>
                     ))}
                   </select>
