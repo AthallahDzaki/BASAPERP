@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
-
-let counter = 5000;
+import { v4 } from 'uuid';
 
 const ManufacturingOrderSchema = new mongoose.Schema({
   moNumber: {
@@ -20,29 +19,47 @@ const ManufacturingOrderSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
+    default: 1,
   },
-  startDate: {
+  plannedStartDate: {
     type: Date,
     default: Date.now,
   },
-  deadlineDate: {
+  plannedEndDate: {
     type: Date,
-    required: true,
   },
-  completedDate: Date,
+  actualStartDate: {
+    type: Date,
+  },
+  actualEndDate: {
+    type: Date,
+  },
+  workCenter: {
+    type: String,
+    default: '',
+  },
+  priority: {
+    type: String,
+    enum: ['low', 'normal', 'high'],
+    default: 'normal',
+  },
   status: {
     type: String,
     enum: ['draft', 'confirmed', 'in_progress', 'done', 'cancelled'],
     default: 'draft',
   },
-  notes: String,
+  notes: {
+    type: String,
+    default: '',
+  },
 }, {
   timestamps: true,
 });
 
-ManufacturingOrderSchema.pre('save', async function(next) {
+ManufacturingOrderSchema.pre('save', function(next) {
   if (!this.moNumber) {
-    this.moNumber = `MO${String(counter++).padStart(5, '0')}`;
+    // MO + short unique id (10 chars)
+    this.moNumber = `MO${v4().replace(/-/g, '').slice(0, 10).toUpperCase()}`;
   }
   next();
 });
